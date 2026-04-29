@@ -2,9 +2,10 @@ using ParkEase.PaymentService.DTOs;
 
 namespace ParkEase.PaymentService.Interfaces;
 
-/// <summary>Business logic contract for payment operations</summary>
 public interface IPaymentService
 {
+    Task<ApiResponse<RazorpayOrderDto>> CreateRazorpayOrderAsync(CreateOrderRequest request);
+    Task<ApiResponse<PaymentDto>> VerifyAndSavePaymentAsync(VerifyPaymentRequest request);
     Task<ApiResponse<PaymentDto>> ProcessPaymentAsync(ProcessPaymentRequest request);
     Task<ApiResponse<PaymentDto>> GetByBookingIdAsync(int bookingId);
     Task<ApiResponse<List<PaymentDto>>> GetByUserIdAsync(int userId);
