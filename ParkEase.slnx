@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="ParkEase.AuthService/ParkEase.AuthService.csproj" />
+  <Project Path="ParkEase.BookingService/ParkEase.BookingService.csproj" />
+  <Project Path="ParkEase.NotificationService/ParkEase.NotificationService.csproj" />
+  <Project Path="ParkEase.ParkingLotService/ParkEase.ParkingLotService.csproj" />
+  <Project Path="ParkEase.PaymentService/ParkEase.PaymentService.csproj" />
+  <Project Path="ParkEase.SpotService/ParkEase.SpotService.csproj" />
+  <Project Path="ParkEase.Tests/ParkEase.Tests.csproj" />
+  <Project Path="ParkEase.VehicleService/ParkEase.VehicleService.csproj" />
+</Solution>
