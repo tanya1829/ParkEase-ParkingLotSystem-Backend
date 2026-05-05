@@ -26,6 +26,7 @@ builder.Services.AddHttpClient("Razorpay")
 // ─── Dependency Injection ─────────────────────────────────────────────────────
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddHttpClient("Razorpay"); // ← Razorpay HTTP client
 
 // ─── JWT Authentication ───────────────────────────────────────────────────────
 var jwtSecret = builder.Configuration["Jwt:Secret"]
