@@ -12,4 +12,8 @@ public interface IPaymentService
     Task<ApiResponse<PaymentDto>> RefundPaymentAsync(RefundRequest request);
     Task<ApiResponse<string>> GetPaymentStatusAsync(int paymentId);
     Task<ApiResponse<List<PaymentDto>>> GetTransactionHistoryAsync(int userId);
+
+    // ── Razorpay ──────────────────────────────────────────────────────────────
+    Task<ApiResponse<RazorpayOrderDto>> CreateRazorpayOrderAsync(CreateOrderRequest request);
+    Task<ApiResponse<PaymentDto>> VerifyAndRecordPaymentAsync(VerifyPaymentRequest request);
 }
