@@ -15,6 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PaymentDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// ─── HTTP Client for Razorpay ────────────────────────────────────────────────────
+builder.Services.AddHttpClient("Razorpay")
+    .ConfigureHttpClient(client =>
+    {
+        client.BaseAddress = new Uri("https://api.razorpay.com/");
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+    });
+
 // ─── Dependency Injection ─────────────────────────────────────────────────────
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
