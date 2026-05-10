@@ -1,0 +1,54 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkEase.AuthService", "ParkEase.AuthService\ParkEase.AuthService.csproj", "{50096D76-A7F8-D90A-ECC2-13FACBA7FA72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkEase.BookingService", "ParkEase.BookingService\ParkEase.BookingService.csproj", "{3AD04473-F70A-F3B6-892E-D7A643124393}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkEase.ParkingLotService", "ParkEase.ParkingLotService\ParkEase.ParkingLotService.csproj", "{3747C3B3-A451-5E37-D813-A1D6BD5FCA53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkEase.PaymentService", "ParkEase.PaymentService\ParkEase.PaymentService.csproj", "{A358250A-7518-3C29-8DF4-3134E09024DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkEase.SpotService", "ParkEase.SpotService\ParkEase.SpotService.csproj", "{31E6EB87-AF63-E4B2-ACEF-F71131EF63B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkEase.VehicleService", "ParkEase.VehicleService\ParkEase.VehicleService.csproj", "{9984FE5E-2065-364D-93E5-0AA39FF5DA19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50096D76-A7F8-D90A-ECC2-13FACBA7FA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50096D76-A7F8-D90A-ECC2-13FACBA7FA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50096D76-A7F8-D90A-ECC2-13FACBA7FA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50096D76-A7F8-D90A-ECC2-13FACBA7FA72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AD04473-F70A-F3B6-892E-D7A643124393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD04473-F70A-F3B6-892E-D7A643124393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD04473-F70A-F3B6-892E-D7A643124393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AD04473-F70A-F3B6-892E-D7A643124393}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3747C3B3-A451-5E37-D813-A1D6BD5FCA53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3747C3B3-A451-5E37-D813-A1D6BD5FCA53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3747C3B3-A451-5E37-D813-A1D6BD5FCA53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3747C3B3-A451-5E37-D813-A1D6BD5FCA53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A358250A-7518-3C29-8DF4-3134E09024DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A358250A-7518-3C29-8DF4-3134E09024DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A358250A-7518-3C29-8DF4-3134E09024DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A358250A-7518-3C29-8DF4-3134E09024DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31E6EB87-AF63-E4B2-ACEF-F71131EF63B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E6EB87-AF63-E4B2-ACEF-F71131EF63B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E6EB87-AF63-E4B2-ACEF-F71131EF63B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E6EB87-AF63-E4B2-ACEF-F71131EF63B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9984FE5E-2065-364D-93E5-0AA39FF5DA19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9984FE5E-2065-364D-93E5-0AA39FF5DA19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9984FE5E-2065-364D-93E5-0AA39FF5DA19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9984FE5E-2065-364D-93E5-0AA39FF5DA19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E48DE687-4BCA-47A4-A89D-F12DE1A0F48D}
+	EndGlobalSection
+EndGlobal
