@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 10000
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["ParkEase.NotificationService/ParkEase.NotificationService.csproj", "ParkEase.NotificationService/"]
+RUN dotnet restore "ParkEase.NotificationService/ParkEase.NotificationService.csproj"
+COPY . .
+WORKDIR "/src/ParkEase.NotificationService"
+RUN dotnet publish -c Release -o /app/out
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/out .
+ENV ASPNETCORE_URLS=http://0.0.0.0:10000
+ENTRYPOINT ["dotnet", "ParkEase.NotificationService.dll"]
