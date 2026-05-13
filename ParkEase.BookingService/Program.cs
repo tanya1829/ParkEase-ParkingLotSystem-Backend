@@ -10,16 +10,12 @@ using ParkEase.BookingService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ─── PostgreSQL + EF Core ─────────────────────────────────────────────────────
-// Booking Service uses its own database: parkease_bookings
 builder.Services.AddDbContext<BookingDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ─── Dependency Injection ─────────────────────────────────────────────────────
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 
-// ─── JWT Authentication (same secret as Auth Service) ────────────────────────
 var jwtSecret = builder.Configuration["Jwt:Secret"]
     ?? throw new InvalidOperationException("Jwt:Secret is not configured.");
 
@@ -42,7 +38,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-// ─── Swagger ─────────────────────────────────────────────────────────────────
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -52,9 +47,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
         Description = "Booking lifecycle and analytics API for ParkEase platform."
     });
-
     c.EnableAnnotations();
-
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Enter your JWT token: Bearer eyJhbGci...",
@@ -76,7 +69,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -85,14 +77,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ─── Auto-migrate on startup ──────────────────────────────────────────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
+    db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS bookings");
     db.Database.Migrate();
 }
 
-// ─── Middleware Pipeline ──────────────────────────────────────────────────────
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -101,7 +92,6 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseCors("AllowAll");
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

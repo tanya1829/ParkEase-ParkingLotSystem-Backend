@@ -11,17 +11,13 @@ using ParkEase.AuthService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ─── PostgreSQL + EF Core ─────────────────────────────────────────────────────
-// Auth Service uses its own database: parkease_auth
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ─── Dependency Injection ─────────────────────────────────────────────────────
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtHelper>();
 
-// ─── JWT Authentication ───────────────────────────────────────────────────────
 var jwtSecret = builder.Configuration["Jwt:Secret"]
     ?? throw new InvalidOperationException("Jwt:Secret is not configured.");
 
@@ -44,7 +40,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-// ─── Swagger with Annotations ─────────────────────────────────────────────────
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -52,26 +47,8 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "ParkEase — Auth Service",
         Version = "v1",
-      /*  Description = @"
- ## Authentication & User Management API
-
-Handles all authentication for the ParkEase platform:
-- **Register** new Drivers and Lot Managers
-- **Login** with email/password or Google/GitHub OAuth
-- **JWT tokens** — access token (24hrs) + refresh token (7 days)
-- **Profile** management and password changes
-
-### How to use JWT in other endpoints
-1. Call `/api/v1/auth/login` to get your token
-2. Copy the `token` value from the response
-3. Click the **Authorize** button above and enter: `Bearer {your_token}`
-        "*/
     });
-
-    // Enable [SwaggerOperation] annotations
     c.EnableAnnotations();
-
-    // JWT support in Swagger UI
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Enter your JWT token like this: Bearer eyJhbGci...",
@@ -93,7 +70,6 @@ Handles all authentication for the ParkEase platform:
     });
 });
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -102,15 +78,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ─── Auto-migrate on startup ──────────────────────────────────────────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
+    db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS auth");
     db.Database.Migrate();
 }
 
-// ─── Middleware Pipeline ──────────────────────────────────────────────────────
-// Swagger opens at root: http://localhost:5001
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -119,12 +93,10 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseCors("AllowAll");
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Health check endpoint
 app.MapGet("/health", () => Results.Ok(new
 {
     Status = "Healthy",
