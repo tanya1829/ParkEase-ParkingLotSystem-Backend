@@ -12,7 +12,7 @@ public class AuthDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("auth"); // ← ONLY THIS LINE ADDED
+        modelBuilder.HasDefaultSchema("auth"); // ← ADDED
 
         modelBuilder.Entity<User>(entity =>
         {
