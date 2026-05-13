@@ -1,4 +1,4 @@
-name: New Environment
+name: ParkEase Local
 values:
   - key: baseUrl_auth
     value: ''
@@ -15,4 +15,6 @@ values:
   - key: token
     value: ''
   - key: refreshToken
+    value: ''
+  - key: baseUrl_notifications
     value: ''

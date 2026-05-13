@@ -10,15 +10,12 @@ using ParkEase.ParkingLotService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ─── PostgreSQL + EF Core ─────────────────────────────────────────────────────
 builder.Services.AddDbContext<ParkingLotDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ─── Dependency Injection ─────────────────────────────────────────────────────
 builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
 builder.Services.AddScoped<IParkingLotService, ParkingLotService>();
 
-// ─── JWT Authentication (shared secret with Auth Service) ────────────────────
 var jwtSecret = builder.Configuration["Jwt:Secret"]
     ?? throw new InvalidOperationException("Jwt:Secret is not configured.");
 
@@ -41,7 +38,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-// ─── Swagger ──────────────────────────────────────────────────────────────────
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -72,7 +68,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -81,15 +76,14 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ─── Auto-migrate on startup ──────────────────────────────────────────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ParkingLotDbContext>();
-    db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS lots");
+    db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS bookings");
+    db.Database.ExecuteSqlRaw("SET search_path TO bookings,public");
     db.Database.Migrate();
 }
 
-// ─── Middleware ───────────────────────────────────────────────────────────────
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

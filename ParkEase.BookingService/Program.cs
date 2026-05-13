@@ -81,6 +81,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<BookingDbContext>();
     db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS bookings");
+    db.Database.ExecuteSqlRaw("SET search_path TO bookings,public");
     db.Database.Migrate();
 }
 
