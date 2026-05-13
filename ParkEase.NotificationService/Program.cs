@@ -10,16 +10,12 @@ using ParkEase.NotificationService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ─── PostgreSQL + EF Core ─────────────────────────────────────────────────────
-// Notification Service uses its own database: parkease_notifications
 builder.Services.AddDbContext<NotificationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ─── Dependency Injection ─────────────────────────────────────────────────────
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 
-// ─── JWT Authentication ───────────────────────────────────────────────────────
 var jwtSecret = builder.Configuration["Jwt:Secret"]
     ?? throw new InvalidOperationException("Jwt:Secret is not configured.");
 
@@ -42,7 +38,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-// ─── Swagger ──────────────────────────────────────────────────────────────────
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -50,11 +45,9 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "ParkEase — Notification Service",
         Version = "v1",
-        Description = "In-app notification management for ParkEase — booking confirmations, check-in/out alerts, payment receipts, and expiry reminders."
+        Description = "In-app notification management for ParkEase."
     });
-
     c.EnableAnnotations();
-
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Enter your JWT token: Bearer eyJhbGci...",
@@ -76,7 +69,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -85,14 +77,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ─── Auto-migrate on startup ──────────────────────────────────────────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<NotificationDbContext>();
+    db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS notifications");
     db.Database.Migrate();
 }
 
-// ─── Middleware Pipeline ──────────────────────────────────────────────────────
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -101,7 +92,6 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseCors("AllowAll");
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

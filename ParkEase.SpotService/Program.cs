@@ -10,16 +10,12 @@ using ParkEase.SpotService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ─── PostgreSQL + EF Core ─────────────────────────────────────────────────────
-// Spot Service uses its own database: parkease_spots
 builder.Services.AddDbContext<SpotDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ─── Dependency Injection ─────────────────────────────────────────────────────
 builder.Services.AddScoped<ISpotRepository, SpotRepository>();
 builder.Services.AddScoped<ISpotService, SpotService>();
 
-// ─── JWT Authentication (same secret as Auth Service) ────────────────────────
 var jwtSecret = builder.Configuration["Jwt:Secret"]
     ?? throw new InvalidOperationException("Jwt:Secret is not configured.");
 
@@ -42,7 +38,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
-// ─── Swagger with Annotations ─────────────────────────────────────────────────
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -50,11 +45,9 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "ParkEase — Spot Service",
         Version = "v1",
-        Description = "Parking Spot Management API — handles individual spot CRUD, status transitions, and filtering."
+        Description = "Parking Spot Management API."
     });
-
     c.EnableAnnotations();
-
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Enter your JWT token: Bearer eyJhbGci...",
@@ -76,7 +69,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// ─── CORS ─────────────────────────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -85,14 +77,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ─── Auto-migrate on startup ──────────────────────────────────────────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SpotDbContext>();
+    db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS spots");
     db.Database.Migrate();
 }
 
-// ─── Middleware Pipeline ──────────────────────────────────────────────────────
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -101,7 +92,6 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseCors("AllowAll");
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
