@@ -78,10 +78,12 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// ─── Auto-migrate on startup ──────────────────────────────────────────────────
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
     db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS auth");
+    db.Database.ExecuteSqlRaw("SET search_path TO auth,public");
     db.Database.Migrate();
 }
 
