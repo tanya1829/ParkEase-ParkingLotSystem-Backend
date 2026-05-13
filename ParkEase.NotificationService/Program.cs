@@ -81,7 +81,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<NotificationDbContext>();
     db.Database.ExecuteSqlRaw("CREATE SCHEMA IF NOT EXISTS notifications");
-    db.Database.Migrate();
+    db.Database.EnsureCreated();
 }
 
 app.UseSwagger();
