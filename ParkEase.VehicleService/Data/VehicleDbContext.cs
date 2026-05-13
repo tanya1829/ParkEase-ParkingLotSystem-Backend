@@ -3,10 +3,6 @@ using ParkEase.VehicleService.Entities;
 
 namespace ParkEase.VehicleService.Data;
 
-/// <summary>
-/// EF Core DbContext for Vehicle Service.
-/// Uses its own database: parkease_vehicles
-/// </summary>
 public class VehicleDbContext : DbContext
 {
     public VehicleDbContext(DbContextOptions<VehicleDbContext> options) : base(options) { }
@@ -15,6 +11,8 @@ public class VehicleDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("vehicles"); // ← ADDED
+
         modelBuilder.Entity<Vehicle>(entity =>
         {
             entity.HasKey(v => v.VehicleId);
@@ -27,10 +25,7 @@ public class VehicleDbContext : DbContext
             entity.Property(v => v.IsEV).HasDefaultValue(false);
             entity.Property(v => v.IsActive).HasDefaultValue(true);
 
-            // Unique license plate per owner
             entity.HasIndex(v => new { v.OwnerId, v.LicensePlate }).IsUnique();
-
-            // Indexes for fast lookup
             entity.HasIndex(v => v.OwnerId);
             entity.HasIndex(v => v.LicensePlate);
             entity.HasIndex(v => v.VehicleType);

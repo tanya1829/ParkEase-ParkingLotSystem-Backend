@@ -1,0 +1,18 @@
+name: New Environment
+values:
+  - key: baseUrl_auth
+    value: ''
+  - key: baseUrl_lots
+    value: ''
+  - key: baseUrl_spots
+    value: ''
+  - key: baseUrl_vehicles
+    value: ''
+  - key: baseUrl_bookings
+    value: ''
+  - key: baseUrl_payments
+    value: ''
+  - key: token
+    value: ''
+  - key: refreshToken
+    value: ''

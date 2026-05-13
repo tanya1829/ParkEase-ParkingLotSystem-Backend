@@ -11,6 +11,8 @@ public class ParkingLotDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("lots"); // ← ADDED
+
         modelBuilder.Entity<ParkingLot>(entity =>
         {
             entity.HasKey(p => p.LotId);
@@ -24,11 +26,8 @@ public class ParkingLotDbContext : DbContext
             entity.Property(p => p.IsApproved).HasDefaultValue(false);
             entity.Property(p => p.RowVersion).IsRowVersion();
 
-            // Index for fast city search
             entity.HasIndex(p => p.City);
-            // Index for manager lookup
             entity.HasIndex(p => p.ManagerId);
-            // Index for approval status
             entity.HasIndex(p => p.IsApproved);
         });
     }

@@ -3,10 +3,6 @@ using ParkEase.NotificationService.Entities;
 
 namespace ParkEase.NotificationService.Data;
 
-/// <summary>
-/// EF Core DbContext for Notification Service.
-/// Uses its own database: parkease_notifications
-/// </summary>
 public class NotificationDbContext : DbContext
 {
     public NotificationDbContext(DbContextOptions<NotificationDbContext> options) : base(options) { }
@@ -15,6 +11,8 @@ public class NotificationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("notifications"); // ← ADDED
+
         modelBuilder.Entity<Notification>(entity =>
         {
             entity.HasKey(n => n.NotificationId);
@@ -26,7 +24,6 @@ public class NotificationDbContext : DbContext
             entity.Property(n => n.RelatedType).HasMaxLength(20);
             entity.Property(n => n.IsRead).HasDefaultValue(false);
 
-            // Indexes for fast querying
             entity.HasIndex(n => n.RecipientId);
             entity.HasIndex(n => n.IsRead);
             entity.HasIndex(n => n.Type);

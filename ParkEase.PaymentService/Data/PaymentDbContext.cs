@@ -3,10 +3,6 @@ using ParkEase.PaymentService.Entities;
 
 namespace ParkEase.PaymentService.Data;
 
-/// <summary>
-/// EF Core DbContext for Payment Service.
-/// Uses its own database: parkease_payments
-/// </summary>
 public class PaymentDbContext : DbContext
 {
     public PaymentDbContext(DbContextOptions<PaymentDbContext> options) : base(options) { }
@@ -15,6 +11,8 @@ public class PaymentDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("payments"); // ← ADDED
+
         modelBuilder.Entity<Payment>(entity =>
         {
             entity.HasKey(p => p.PaymentId);
@@ -26,8 +24,7 @@ public class PaymentDbContext : DbContext
             entity.Property(p => p.TransactionId).HasMaxLength(200);
             entity.Property(p => p.Description).HasMaxLength(500);
 
-            // Indexes
-            entity.HasIndex(p => p.BookingId).IsUnique(); // one payment per booking
+            entity.HasIndex(p => p.BookingId).IsUnique();
             entity.HasIndex(p => p.UserId);
             entity.HasIndex(p => p.Status);
             entity.HasIndex(p => p.TransactionId);

@@ -3,11 +3,6 @@ using ParkEase.BookingService.Entities;
 
 namespace ParkEase.BookingService.Data;
 
-/// <summary>
-/// EF Core DbContext for Booking Service.
-/// Uses its own database: parkease_bookings
-/// Also stores OccupancyLogs for analytics.
-/// </summary>
 public class BookingDbContext : DbContext
 {
     public BookingDbContext(DbContextOptions<BookingDbContext> options) : base(options) { }
@@ -17,6 +12,8 @@ public class BookingDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("bookings"); // ← ADDED
+
         modelBuilder.Entity<Booking>(entity =>
         {
             entity.HasKey(b => b.BookingId);
@@ -28,7 +25,6 @@ public class BookingDbContext : DbContext
             entity.Property(b => b.TotalAmount).HasColumnType("decimal(10,2)");
             entity.Property(b => b.PricePerHour).HasColumnType("decimal(10,2)");
 
-            // Indexes for fast querying
             entity.HasIndex(b => b.UserId);
             entity.HasIndex(b => b.LotId);
             entity.HasIndex(b => b.SpotId);
